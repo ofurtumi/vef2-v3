@@ -1,0 +1,48 @@
+{
+  "name": "verk2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "build": "dotenv -e .env node ./src/setup.js",
+    "start": "dotenv -e .env node ./src/app.js",
+    "dev": "dotenv -e .env -- nodemon ./src/app.js",
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest ./tests/*.js",
+    "prettier": "prettier --write .",
+    "lint": "concurrently npm:lint:*",
+    "lint:eslint": "eslint ./src/**/*.js --fix",
+    "lint:stylelint": "stylelint ./public/style.css --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "db": "^3.3.1",
+    "dotenv": "^16.0.0",
+    "dotenv-cli": "^5.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "express-session": "^1.17.2",
+    "faker": "^5.4.0",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0",
+    "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "concurrently": "^7.0.0",
+    "eslint": "^8.9.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.5.1",
+    "stylelint": "^14.5.0",
+    "stylelint-config-sass-guidelines": "^9.0.1",
+    "stylelint-config-standard": "^25.0.0"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}

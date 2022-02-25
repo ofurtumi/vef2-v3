@@ -1,0 +1,14 @@
+<%- include('header') %>
+<form action="/admin/login" method="post">
+    <fieldset>
+        <legend>Username</legend>        
+        <input type="text" id="username" name="username">
+    </fieldset>
+    <fieldset>
+        <legend>Password</legend>
+        <input type="password" name="password" id="password">
+    </fieldset>
+    <button class="login-button">Skrá inn!</button>
+</form>
+<%- message %> 
+<%- include('footer') %>

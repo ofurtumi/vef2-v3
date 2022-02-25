@@ -1,0 +1,15 @@
+<h2>Skrá á viðburð</h2>
+<form action="/<%= details.slug %>" method="post" id="add-user">
+    <fieldset>
+        <legend>Nafn</legend>
+        <input type="text" name="name" id="name" required="true">
+    </fieldset>
+    <fieldset>
+        <legend>Athugasemd</legend>
+        <textarea name="comment" id="comment"></textarea>
+    </fieldset>
+</form>
+
+<div class="update-buttons">
+    <button form="add-user">Skrá</button>
+</div>

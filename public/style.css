@@ -1,0 +1,265 @@
+:root {
+  --border-basic: 5px solid #000;
+  --border-radius-basic: 0
+  --padding-basic: 5px;
+
+  --single-event-bg: #fff;
+  --single-event-cl: #000;
+}
+
+html {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  margin: 0;
+}
+
+header {
+  align-items: center;
+  background-color: rgb(211, 211, 211);
+  display: flex;
+  height: 3em;
+  justify-content: center;
+  margin: 0 auto;
+  width: 100vw;
+}
+
+header ul {
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding-inline-start: 0;
+}
+
+header li {
+  display: inline;
+}
+
+header a {
+  color: var(--single-event-cl);
+  font-size: 1.5em;
+  text-decoration: none;
+  transition: 0.1s;
+}
+
+header a:hover {
+  color: rgb(128, 128, 128);
+}
+
+footer {
+  bottom: 0;
+  margin: 0;
+  position: fixed;
+  width: 100%;
+}
+
+footer p {
+  margin: 0;
+  margin: 0 20px 20px;
+  text-align: end;
+}
+
+main {
+  margin: 0 auto 50px;
+  max-width: 1000px;
+}
+
+h1 {
+  padding: var(--padding-basic);
+  text-align: center;
+}
+
+hr {
+  margin: 5px auto;
+  max-width: 95%;
+}
+
+button {
+  background-color: var(--single-event-bg);
+  border: var(--border-basic);
+  border-radius: var(--border-radius-basic);
+  color: var(--single-event-cl);
+  cursor: pointer;
+  display: block;
+  font-size: 1.25em;
+  margin: 0 auto;
+  padding: 10px;
+  transition: 0.1s;
+}
+
+button:hover,
+button:focus-visible {
+  background-color: var(--single-event-cl);
+  color: var(--single-event-bg);
+}
+
+.basic-border {
+  border: var(--border-basic);
+  border-radius: var(--border-radius-basic);
+}
+
+.list-events {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+}
+
+.list-single-event {
+  background-color: var(--single-event-bg);
+  color: var(--single-event-cl);
+  min-height: 100px;
+  padding: var(--padding-basic);
+  position: relative;
+  transition: ease-in-out 0.1s;
+}
+
+.list-single-event:hover,
+.list-single-event:focus-within {
+  background: var(--single-event-cl);
+  color: var(--single-event-bg);
+}
+
+.login-button {
+  margin-top: 20px;
+}
+
+.list-single-event h2 {
+  color: inherit;
+  display: block;
+  font-size: 2em;
+  font-weight: normal;
+  margin: 0;
+  text-align: center;
+  text-decoration: none;
+  word-break: break-word;
+  padding: 5px;
+}
+
+.list-single-event p {
+  margin: 0 auto;
+  max-width: 95%;
+  word-break: break-word;
+  padding-bottom: 5px;
+}
+
+.link-spanner {
+  height: 100%;
+  left: 0;
+  pointer-events: auto;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.admin-form {
+  /* padding: 20px; */
+  margin: 20px 0;
+}
+
+textarea {
+  min-height: 100px;
+  resize: none;
+  width: 100%;
+}
+
+.dates {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+}
+
+.admin-form-field-button {
+  width: 100%;
+}
+
+.admin-form fieldset {
+  margin: 0;
+}
+
+.admin-form-field-button button {
+  margin-top: 20px;
+}
+
+fieldset {
+  border: var(--border-basic);
+}
+
+legend {
+  font-size: 2em;
+}
+
+fieldset input,
+fieldset textarea,
+fieldset p {
+  border: 0;
+  font-size: 1.5em;
+  text-decoration: none;
+  width: 100%;
+}
+
+.update-event {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.update-event textarea {
+  min-height: 250px;
+}
+
+.update-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.update-buttons button {
+  margin: 0;
+}
+
+.delete-button {
+  border: 5px solid #f00;
+  color: #f00;
+}
+
+.delete-button:hover {
+  background-color: #f00;
+  color: var(--single-event-bg);
+}
+
+.list-comments {
+  margin: 0 auto;
+  padding-inline-start: 0;
+  width: 50%;
+}
+
+.single-comment {
+  border-bottom: var(--border-basic);
+  list-style: none;
+  padding: 10px;
+}
+
+.single-comment h4,
+.single-comment p {
+  margin: 0.35em;
+}
+
+@media screen and (max-width: 1000px) {
+  footer {
+    display: none;
+  }
+
+  main {
+    margin: 10px;
+  }
+}

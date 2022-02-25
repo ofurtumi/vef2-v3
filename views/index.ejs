@@ -1,0 +1,28 @@
+<%- include('header') -%>
+
+<h1><%= title %></h1>
+
+<% if(events.length > 0) { %> 
+    <div class="list-events">
+        <% events.forEach(event => { %>
+            <div class="list-single-event basic-border">
+                <h2><%= event.name %></h2>
+                <% if (event.description) { %>
+                    <hr>
+                    <p><%= event.description %></p>
+                <% } %>
+                <a href="<%=event.slug %>">
+                    <span class="link-spanner"></span>
+                </a>
+            </div>
+        <% }); %> 
+    </div>
+<% } else { %>
+    <h1>Ekki neinir viðburðir til staðar</h1>
+<% } %> 
+
+<% if(validated && admin) { %>
+    <%- include('admin-index') -%>
+<% } %>
+
+<%- include('footer') -%>

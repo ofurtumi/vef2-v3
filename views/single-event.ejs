@@ -1,0 +1,34 @@
+<%- include ('header') -%> 
+
+<div class="dates">
+    <p>Búið til: <%= cDate.substring(5,16) %> </p> 
+    <p>Síðast breytt: <%= mDate.substring(5,16) %> </p> 
+</div>
+
+<% if (validated) { %>
+    <%- include ('admin-single-event') %> 
+<% } else { %>
+    <fieldset>
+        <legend><%- title %></legend>
+    <% if(details.description) { %> 
+        <p><%= details.description %> </p>
+    <% } else { %>
+        <p>Enginn lýsing er til fyrir þennan viðburð :(</p> 
+    <% } %> 
+    </fieldset>
+    <%- include ('user-single-event') %> 
+<% }; %>
+<% if (eventComments) { %> 
+    <ul class="list-comments">
+    <% eventComments.forEach(c => { %>
+        <li class="single-comment">
+            <h4><%= c.name %></h4>
+            <% if(c.omment !== "") { %> 
+                    <p><%= c.comment %></p> 
+            <% } %> 
+        </li>
+    <% }) %>
+    </ul>
+<% } %> 
+
+<%- include ('footer') -%> 

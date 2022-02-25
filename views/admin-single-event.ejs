@@ -1,0 +1,18 @@
+<form action="/admin/<%= details.slug %>" method="post" class="update-event" id="update-event">
+    <h1>Breyta viðburð</h1>
+    <fieldset>
+        <legend>Nafn viðburðar</legend>
+        <input type="text" id="name" name="name" value="<%= title %>" required="true">
+    </fieldset>
+    <fieldset>
+        <legend>Lýsing viðburðar</legend>
+        <textarea id="description" name="description"><%= desc %></textarea>
+    </fieldset>
+</form>
+
+<div class="update-buttons">
+    <button type="submit" form="update-event">Uppfæra viðburð</button>
+    <form action="/admin/delete-event/<%= details.id %>" method="post">
+        <button class="delete-button">Eyða viðburð</button>
+    </form>
+</div>
