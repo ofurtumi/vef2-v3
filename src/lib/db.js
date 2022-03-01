@@ -11,16 +11,16 @@ dotenv.config();
 dotenv.config();
 
 const {
-  HOST: hostname = '127.0.0.1',
-  PORT: port = 6969,
-  NODE_ENV: nodeEnv = 'development',
-  SESSION_SECRET: sessionSecret,
-  DATABASE_URL: connectionString,
+	HOST: hostname = '127.0.0.1',
+	PORT: port = 6969,
+	NODE_ENV: nodeEnv = 'development',
+	SESSION_SECRET: sessionSecret,
+	DATABASE_URL: connectionString,
 } = process.env;
 
 if (!connectionString || !sessionSecret) {
-  console.error("Vantar gögn í env");
-  process.exit(1);
+	console.error('Vantar gögn í env');
+	process.exit(1);
 }
 
 const ssl = nodeEnv === 'production' ? { rejectUnauthorized: false } : false;
@@ -122,19 +122,15 @@ export async function deleteRow(id) {
 		const checkIfComments = await query(
 			'SELECT id FROM registration WHERE eventid = $1',
 			[id]
-		)
+		);
 		if (checkIfComments.rowCount !== 0) {
-			
-			checkIfComments.rows.forEach(async element => {
-				await query(
-					'DELETE FROM registration WHERE id = $1',
-					[element.id]
-				);
+			checkIfComments.rows.forEach(async (element) => {
+				await query('DELETE FROM registration WHERE id = $1', [
+					element.id,
+				]);
 			});
 		}
-	} catch (error) {
-		
-	}
+	} catch (error) {}
 	try {
 		const queryResult = await query(
 			'DELETE FROM events WHERE id = $1 RETURNING *',
@@ -160,7 +156,7 @@ export async function deleteRow(id) {
 export async function update({ id, name, description }) {
 	let success = true;
 
-	const slug = name.replaceAll(' ', '-');
+	const slug = name.replace(/ /g, '-');
 
 	const now = new Date();
 	const q = `UPDATE events SET 

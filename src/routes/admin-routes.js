@@ -1,12 +1,27 @@
 import express from 'express';
+import jsonwebtoken from 'jsonwebtoken';
 import passport from 'passport';
 
 import { createEvent, getAllEvents, updateEvent } from '../events.js';
 import { deleteRow } from '../lib/db.js';
 import { ensureLoggedIn } from '../login.js';
 import { catchErrors } from '../utils.js';
+// import { jsonwebtoken as jwt } from 'jsonwebtoken';
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const jwt = require('jsonwebtoken');
 
 export const router = express.Router();
+
+function validateToken(req, res) {
+  next()
+}
+
+function generateAccessToken(username) {
+  return jwt.sign(username, process.env.SESSION_SECRET, { expiresIn: '1800s' });
+  // todo fá þetta til að virka?????
+}
+
 
 function login(req, res) {
   const validated = req.isAuthenticated();
@@ -23,7 +38,7 @@ function login(req, res) {
     req.session.messages = [];
   }
 
-  return res.render('login', { message, title: 'Innskráning', validated });
+  return res.send(JSON.stringify({ message, title: 'Innskráning', validated }));
 }
 
 async function index(req, res) {
@@ -32,12 +47,12 @@ async function index(req, res) {
   const admin = req.isAuthenticated();
   const events = await getAllEvents();
 
-  return res.render('index', {
+  return res.send(JSON.stringify({
     title,
     validated,
     events,
     admin,
-  });
+  }));
 }
 
 async function deleteRoute(req, res) {
@@ -50,11 +65,11 @@ async function deleteRoute(req, res) {
     return res.redirect('/admin');
   }
 
-  return res.render('error', { title: 'Gat ekki eytt færslu' });
+  return res.send(JSON.stringify({ title: 'Gat ekki eytt færslu' }));
 }
 
 router.get('/', ensureLoggedIn, catchErrors(index));
-router.get('/login', login);
+router.get('/login', login, generateAccessToken);
 
 router.post('/', ensureLoggedIn, catchErrors(createEvent));
 
@@ -81,3 +96,5 @@ router.get('/logout', (req, res) => {
   req.logout();
   res.redirect('/');
 });
+
+// verkefni 3 begin

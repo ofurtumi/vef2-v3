@@ -18,12 +18,26 @@ CREATE TABLE IF NOT EXISTS registration (
 
 CREATE TABLE IF NOT EXISTS users (
     id serial primary key,
-    username character varying(255) NOT NULL,
-    password character varying(255) NOT NULL
+    name VARCHAR(64) NOT NULL,
+    username character varying(64) NOT NULL UNIQUE,
+    password character varying(255) NOT NULL,
+    admin BOOLEAN default FALSE
 );
 -- Lykilorð: "123"
-INSERT INTO users (username, password)
+INSERT INTO users (name, username, password, admin)
 VALUES (
         'admin',
-        '$2a$11$pgj3.zySyFOvIQEpD7W6Aund1Tw.BFarXxgLJxLbrzIv/4Nteisii'
+        'admin',
+        '$2a$11$pgj3.zySyFOvIQEpD7W6Aund1Tw.BFarXxgLJxLbrzIv/4Nteisii',
+        'TRUE'
+    ),(
+        'Tumi',
+        'tumi',
+        '$2a$11$pgj3.zySyFOvIQEpD7W6Aund1Tw.BFarXxgLJxLbrzIv/4Nteisii',
+        'TRUE'
+    ),(
+        'Robert',
+        'bob',
+        '$2a$11$pgj3.zySyFOvIQEpD7W6Aund1Tw.BFarXxgLJxLbrzIv/4Nteisii',
+        'FALSE'
     );

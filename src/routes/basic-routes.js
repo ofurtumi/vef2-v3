@@ -2,6 +2,7 @@ import express from 'express';
 
 import { addResponse, getAllEvents, getSingleEvent } from '../events.js';
 import { getResponses } from '../lib/db.js';
+import { ensureLoggedIn } from '../login.js';
 import { catchErrors } from '../utils.js';
 
 export const router = express.Router();
@@ -12,12 +13,14 @@ async function index(req, res) {
   const validated = req.isAuthenticated();
   const events = await getAllEvents();
 
-  return res.render('index', {
+  const output = JSON.stringify({
     title,
     validated,
     events,
     admin,
-  });
+  })
+
+  return res.send(output);
 }
 
 async function eventPage(req, res) {
@@ -41,7 +44,7 @@ async function eventPage(req, res) {
 
     data = true;
 
-    res.render('single-event', {
+    const output = JSON.stringify({
       title: details.name,
       data,
       details,
@@ -51,12 +54,17 @@ async function eventPage(req, res) {
       mDate,
       validated,
     });
+    
+    return res.send(output);
+
   } catch (error) {
     console.error('Unable to get data corresponding to this slug,', error);
-    res.render('error', { title: 'síða fannst ekki' });
+    res.send('error', { title: 'síða fannst ekki' });
   }
 }
 
 router.get('/', index);
 router.get('/:slug', eventPage);
 router.post('/:slug', catchErrors(addResponse));
+
+// verkefni 3 begin

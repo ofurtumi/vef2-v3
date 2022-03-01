@@ -8,7 +8,7 @@ import dotenv from "dotenv";
 import passport from "./login.js";
 import { router as basicRouter } from "./routes/basic-routes.js";
 import { router as adminRouter } from "./routes/admin-routes.js";
-
+import { router as userRouter } from "./routes/user-routes.js"
 dotenv.config();
 
 const {
@@ -58,6 +58,7 @@ app.locals.formatDate = (str) => {
   return date;
 };
 app.use("/admin", adminRouter);
+app.use("/users", userRouter);
 app.use("/", basicRouter);
 
 /**
@@ -70,7 +71,7 @@ app.use("/", basicRouter);
 // eslint-disable-next-line no-unused-vars
 function notFoundHandler(req, res, next) {
   const title = "Síða fannst ekki";
-  res.status(404).render("error", {
+  res.send(404,"error", {
     title,
     validated: req.isAuthenticated(),
   });
@@ -88,7 +89,7 @@ function notFoundHandler(req, res, next) {
 function errorHandler(err, req, res, next) {
   console.error(err);
   const title = "Villa kom upp";
-  res.status(500).render("error", {
+  res.send(500,"error", {
     title,
     validated: req.isAuthenticated(),
   });
