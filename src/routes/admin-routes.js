@@ -4,7 +4,7 @@ import passport from 'passport';
 
 import { createEvent, getAllEvents, updateEvent } from '../events.js';
 import { deleteRow } from '../lib/db.js';
-import { ensureLoggedIn } from '../login.js';
+import { ensureLoggedIn, isAdmin } from '../login.js';
 import { catchErrors } from '../utils.js';
 // import { jsonwebtoken as jwt } from 'jsonwebtoken';
 import { createRequire } from "module";
@@ -68,8 +68,8 @@ async function deleteRoute(req, res) {
   return res.send(JSON.stringify({ title: 'Gat ekki eytt færslu' }));
 }
 
-router.get('/', ensureLoggedIn, catchErrors(index));
-router.get('/login', login, generateAccessToken);
+router.get('/', ensureLoggedIn, isAdmin, catchErrors(index));
+router.get('/login', isAdmin, login, generateAccessToken);
 
 router.post('/', ensureLoggedIn, catchErrors(createEvent));
 

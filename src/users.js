@@ -1,5 +1,11 @@
 import bcrypt from 'bcrypt';
+import xss from 'xss';
+import dotenv from 'dotenv';
 import { query } from './lib/db.js';
+
+dotenv.config();
+
+const { BCRYPT_ROUNDS: bcryptRounds = 1 } = process.env;
 
 export async function findByUsername(username) {
 	const q = 'SELECT * FROM users WHERE username = $1';
@@ -19,13 +25,9 @@ export async function findByUsername(username) {
 }
 
 export async function comparePasswords(password, hash) {
-	try {
-		return await bcrypt.compare(password, hash);
-	} catch (e) {
-		console.error('Gat ekki borið saman lykilorð', e);
-	}
-
-	return false;
+	const result = await bcrypt.compare(password, hash);
+	// console.log('result --> ', result)
+	return result;
 }
 
 export async function findById(id) {
@@ -75,24 +77,28 @@ export async function listSingleUser(id) {
 	}
 }
 
-export async function newUser(name, username, password) {
-	//   const salt = await bcrypt.genSalt(10);
-	//   const encrypted = await bcrypt.hash(password,salt);
+export async function userNotExists(req, res, next) {
+	const { username } = req.body;
+	const isUser = await query('select * from users where username = $1', [
+		username,
+	]);
+	if ((await isUser.rowCount) > 0)
+		return 'Notandi nú þegar til með þetta notendanafn vinsamlegast prófaðu annað\n';
+	return next();
+}
 
-	const isUser = await query('select * from users where username = $1',[username]);
-	if (await isUser.rowCount > 0) return "Notandi nú þegar til með þetta notendanafn vinsamlegast prófaðu annað\n"
-	
-	const hashedPassword = await bcrypt.hash(password, 11);
+export async function newUser(name, username, password) {
+	const hashedPassword = await bcrypt.hash(password, 10);
 
 	const admin = false;
 
 	const q =
-		'INSERT INTO users (name, username, password, admin) VALUES ($1,$2,$3,$4) RETURNING (name, username)';
+		'INSERT INTO users (name, username, password, admin) VALUES ($1,$2,$3,$4) RETURNING *';
 	const values = [name, username, hashedPassword, admin];
 
 	try {
 		const queryResult = await query(q, values);
-		if (queryResult.rowCount !== 0) return queryResult.rows;
+		if (queryResult.rowCount !== 0) return queryResult.rows[0];
 	} catch (error) {
 		console.error('Ekki tókst að búa til notenda');
 		return error;

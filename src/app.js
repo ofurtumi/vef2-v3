@@ -1,22 +1,22 @@
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
-import express from "express";
-import session from "express-session";
-import dotenv from "dotenv";
+import express from 'express';
+import session from 'express-session';
+import dotenv from 'dotenv';
 
-import passport from "./login.js";
-import { router as basicRouter } from "./routes/basic-routes.js";
-import { router as adminRouter } from "./routes/admin-routes.js";
-import { router as userRouter } from "./routes/user-routes.js"
+import passport from './login.js';
+import { router as basicRouter } from './routes/basic-routes.js';
+import { router as adminRouter } from './routes/admin-routes.js';
+import { router as userRouter } from './routes/user-routes.js';
 dotenv.config();
 
 const {
-  HOST: hostname = '127.0.0.1',
-  PORT: port = 6969,
-  NODE_ENV: nodeEnv = 'development',
-  SESSION_SECRET: sessionSecret,
-  DATABASE_URL: connectionString,
+	HOST: hostname = '127.0.0.1',
+	PORT: port = 6969,
+	NODE_ENV: nodeEnv = 'development',
+	SESSION_SECRET: sessionSecret,
+	DATABASE_URL: connectionString,
 } = process.env;
 
 // if (!connectionString || !sessionSecret) {
@@ -25,41 +25,42 @@ const {
 // }
 
 const app = express();
+app.use(passport.initialize());
 
 app.use(express.urlencoded({ extended: true }));
 
 const path = dirname(fileURLToPath(import.meta.url));
 
-app.use(express.static(join(path, "../public")));
-app.set("views", join(path, "../views"));
-app.set("view engine", "ejs");
+app.use(express.static(join(path, '../public')));
+app.set('views', join(path, '../views'));
+app.set('view engine', 'ejs');
 
 app.use(
-  session({
-    secret: sessionSecret,
-    resave: false,
-    saveUninitialized: false,
-    maxAge: 20 * 1000, // 20 sek
-  })
+	session({
+		secret: sessionSecret,
+		resave: false,
+		saveUninitialized: false,
+		maxAge: 20 * 1000, // 20 sek
+	})
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.locals.formatDate = (str) => {
-  let date = "";
+	let date = '';
 
-  try {
-    date = format(str || "", "dd.MM.yyyy");
-  } catch {
-    return "";
-  }
+	try {
+		date = format(str || '', 'dd.MM.yyyy');
+	} catch {
+		return '';
+	}
 
-  return date;
+	return date;
 };
-app.use("/admin", adminRouter);
-app.use("/users", userRouter);
-app.use("/", basicRouter);
+app.use('/admin', adminRouter);
+app.use('/users', userRouter);
+app.use('/', basicRouter);
 
 /**
  * Middleware sem sér um 404 villur.
@@ -70,11 +71,11 @@ app.use("/", basicRouter);
  */
 // eslint-disable-next-line no-unused-vars
 function notFoundHandler(req, res, next) {
-  const title = "Síða fannst ekki";
-  res.send(404,"error", {
-    title,
-    validated: req.isAuthenticated(),
-  });
+	const title = 'Síða fannst ekki';
+	res.send(404, 'error', {
+		title,
+		validated: req.isAuthenticated(),
+	});
 }
 
 /**
@@ -87,17 +88,17 @@ function notFoundHandler(req, res, next) {
  */
 // eslint-disable-next-line no-unused-vars
 function errorHandler(err, req, res, next) {
-  console.error(err);
-  const title = "Villa kom upp";
-  res.send(500,"error", {
-    title,
-    validated: req.isAuthenticated(),
-  });
+	console.error(err);
+	const title = 'Villa kom upp';
+	res.send(500, 'error', {
+		title,
+		validated: req.isAuthenticated(),
+	});
 }
 
 app.use(notFoundHandler);
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.info(`Server running at http://localhost:${port}/`);
+	console.info(`Server running at http://localhost:${port}/`);
 });
