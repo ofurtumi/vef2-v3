@@ -59,7 +59,7 @@ export function isAdmin(req, res, next) {
     console.log('u.admin --> ' + u.admin)
     if (u.admin) return next();
   }
-  res.send("Ekki admin\nSkráðu þig inn á /user/login/\n")
+  return res.status(500).json({error:"Ekki admin\nSkráðu þig inn á /user/login/\n"});
 }
 
 export default passport;

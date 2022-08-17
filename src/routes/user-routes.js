@@ -1,7 +1,11 @@
 import express from 'express';
 import stringTable from 'string-table';
 import jwt from 'jsonwebtoken';
-import { jwtOptions, requireAuthentication, tokenOptions } from '../passport.js';
+import {
+	jwtOptions,
+	requireAuthentication,
+	tokenOptions,
+} from '../passport.js';
 import { ensureLoggedIn, isAdmin } from '../login.js';
 import {
 	findByUsername,
@@ -11,12 +15,15 @@ import {
 	userNotExists,
 } from '../users.js';
 import {
+	nameValidator,
 	passwordValidator,
 	usernameAndPaswordValidValidator,
+	usernameDoesNotExistValidator,
 	usernameValidator,
 	validationCheck,
 } from '../validation.js';
 import jsonwebtoken from 'jsonwebtoken';
+import { catchErrors } from '../../tests/utils.js';
 
 export const router = express.Router();
 
@@ -79,11 +86,11 @@ async function loginUser(req, res) {
 	const user = await findByUsername(username);
 
 	if (!user) {
-        console.error('Unable to find user', username);
-        return res.status(500).json({});
+		console.error('Unable to find user', username);
+		return res.status(500).json({});
 	}
 
-    const payload = { id: user.id };
+	const payload = { id: user.id };
 	const token = jwt.sign(payload, jwtOptions.secretOrKey, tokenOptions);
 	delete user.password;
 
@@ -118,7 +125,15 @@ async function loginRoute(req, res) {
 router.get('/', isAdmin, listUsers);
 router.get('/me', ensureLoggedIn, mirror);
 router.get('/:id', isAdmin, singleUser);
-router.post('/register', userNotExists, registerUser);
+router.post(
+	'/register',
+	usernameValidator,
+	nameValidator,
+	passwordValidator,
+	usernameDoesNotExistValidator,
+	validationCheck,
+	catchErrors(registerUser)
+);
 router.post(
 	'/login',
 	usernameValidator,

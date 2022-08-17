@@ -59,10 +59,25 @@ export const usernameValidator = body('username')
 	.isLength({ min: 1, max: 256 })
 	.withMessage('username is required, max 256 characters');
 
+export const nameValidator = body('name')
+	.isLength({ min: 1, max: 256 })
+	.withMessage('name is required, max 256 characters');
+
 export const passwordValidator = body('password')
 	.if(isPatchingAllowAsOptional)
 	.isLength({ min: 3, max: 256 })
-	.withMessage('password is required, min 10 characters, max 256 characters');
+	.withMessage('password is required, min 3 characters, max 256 characters');
+
+export const usernameDoesNotExistValidator = body('username').custom(
+	async (username) => {
+		const user = await findByUsername(username);
+
+		if (user) {
+			return Promise.reject(new Error('username already exists'));
+		}
+		return Promise.resolve();
+	}
+);
 
 export const usernameAndPaswordValidValidator = body('username').custom(
 	async (username, { req: { body: reqBody } = {} }) => {

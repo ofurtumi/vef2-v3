@@ -59,7 +59,7 @@ async function eventPage(req, res) {
 
   } catch (error) {
     console.error('Unable to get data corresponding to this slug,', error);
-    res.send('error', { title: 'síða fannst ekki' });
+    res.send(json('error', { title: 'síða fannst ekki' }));
   }
 }
 

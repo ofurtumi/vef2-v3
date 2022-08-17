@@ -29,7 +29,7 @@ export async function createEvent(req, res) {
     return res.redirect("/admin");
   }
 
-  return res.send("error", {
+  return res.status(500).json({
     title: "Gat ekki skráð!",
   });
 }
@@ -90,7 +90,7 @@ export async function addResponse(req, res) {
     return res.redirect("/" + slug);
   }
 
-  return res.send("error", {
+  return res.status(500).json({
     title: "Gat ekki skráð á viðburð",
     validated: false,
   });
